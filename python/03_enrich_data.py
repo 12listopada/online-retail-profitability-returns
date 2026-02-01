@@ -1,3 +1,11 @@
+"""
+Enriches transactional data with business and financial metrics.
+
+- Calculates gross and net item revenue
+- Applies discounts and return logic
+- Prepares profitability-related fields for analysis
+"""
+
 # 03_enrich_data.py
 import pandas as pd
 import numpy as np
