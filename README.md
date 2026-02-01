@@ -123,3 +123,8 @@ Core metrics used in the report:
 - Python (pandas) – processing & enrichment
 - SQLite + SQL – storage and validation
 - Power BI + DAX – modeling, measures, visualization
+
+## Dashboard Preview
+
+📄 **Power BI Report (PDF)**  
+[Download report](docs/Retail_Return_Impact_Report.pdf)
