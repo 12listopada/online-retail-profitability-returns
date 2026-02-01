@@ -1,3 +1,11 @@
+"""
+Executes analytical SQL scripts on the SQLite database.
+
+- Runs SQL logic to create fact tables
+- Validates aggregated metrics
+- Finalizes the analytical dataset for BI consumption
+"""
+
 # 05_run_sql.py
 import sqlite3
 
