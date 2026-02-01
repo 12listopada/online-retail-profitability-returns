@@ -1,3 +1,11 @@
+"""
+Loads processed datasets into a SQLite database.
+
+- Creates analytical tables in SQLite
+- Inserts enriched order-item data
+- Prepares the database as a reporting layer for Power BI
+"""
+
 # 04_load_to_sqlite.py
 import sqlite3
 import pandas as pd
