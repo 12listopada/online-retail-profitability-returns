@@ -1,3 +1,11 @@
+"""
+Builds structured orders and order-items datasets.
+
+- Splits transactional data into logical entities
+- Creates order-level and item-level records
+- Ensures correct granularity for further analysis
+"""
+
 # 02_build_orders_items.py
 import pandas as pd
 import numpy as np
