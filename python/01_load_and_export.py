@@ -1,3 +1,12 @@
+"""
+Loads the raw Online Retail dataset and performs initial data cleaning.
+
+- Reads the original Excel file
+- Standardizes column names and data types
+- Handles missing and invalid values
+- Exports cleaned data to intermediate CSV files
+"""
+
 # 01_load_and_export.py
 import pandas as pd
 
