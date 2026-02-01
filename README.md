@@ -1,27 +1,34 @@
-# Online Retail: Return Impact & Profitability Analysis (SQL • Python • Power BI)
+# Online Retail: Return Impact & Profitability Analysis  
+**SQL • Python • Power BI**
 
-End-to-end analytics project: **raw Excel → Python cleaning/enrichment → SQLite (warehouse layer) → SQL validation → Power BI semantic model & dashboard → business insights & recommendations**.
+End-to-end analytics project simulating a real business workflow:  
+**raw Excel → Python cleaning & enrichment → SQLite (warehouse layer) → SQL validation → Power BI semantic model & dashboard → business insights & recommendations**
 
 ---
 
-## 1) Project Goals (Main Intent)
+## 1) Project Objective
 
-Build a portfolio-quality analytics workflow that simulates a real business environment:
+The goal of this project was to build a **portfolio-ready business analytics solution** that mirrors real-world data workflows.
+
+Key objectives:
 - create a clean analytical dataset at **order-item (line) level**
-- quantify profitability using **gross margin** and **contribution margin**
-- measure the financial impact of **returns**, **discounts**, and **shipping costs**
-- deliver an executive-ready **Power BI report** with clear drivers, trends, and a focused deep dive
+- measure profitability using **gross margin** and **contribution margin**
+- quantify the financial impact of **returns**, **discounts**, and **shipping costs**
+- identify profitability drivers across markets and over time
+- deliver an executive-ready **Power BI report** with clear insights and recommendations
 
 ---
 
 ## 2) Business Questions
 
-1. Which markets (countries) drive the highest revenue and profitability?
-2. Which markets have the highest **return impact** and how does it affect contribution margin?
-3. Are high returns correlated with aggressive discounting?
-4. How large is the shipping cost burden across markets (as % of revenue)?
-5. Where do we see margin erosion over time and what are the key drivers?
-6. Is Norway an outlier and if so, **what explains it** (pricing vs operations)?
+This analysis focuses on answering the following business questions:
+
+1. Which countries generate the highest revenue and profitability?
+2. Which markets have the highest **return impact**, and how does it affect contribution margin?
+3. Are high return rates driven by aggressive discounting?
+4. How significant are shipping costs across markets (as % of revenue)?
+5. Where does profitability erode over time and what are the key drivers?
+6. Is Norway an outlier — and if so, is the issue **pricing-related or operational**?
 
 ---
 
@@ -29,102 +36,121 @@ Build a portfolio-quality analytics workflow that simulates a real business envi
 
 - Source: Online Retail transactional dataset (Excel)
 - Scale: ~600k+ rows
-- Grain (analysis level): **order-item (line)**
+- Grain: **order-item (line) level**
 
-> Note: Raw data is not included in this repository.
+> Raw data is not included in this repository.
 
 ---
 
-## 4) Workflow / Pipeline
+## 4) Project Structure
 
-### Python (data processing & transformation)
-Used Python (pandas) to:
-- load large Excel efficiently
-- clean & standardize columns (dates, numeric fields, IDs)
+├── data
+│ ├── raw
+│ └── processed
+├── python
+│ ├── 01_load_and_export.py
+│ ├── 02_build_orders_items.py
+│ ├── 03_enrich_data.py
+│ ├── 04_load_to_sqlite.py
+│ └── 05_run_sql.py
+├── sql
+│ └── warehouse.sql
+├── powerbi
+│ └── README.md
+├── docs
+│ └── Retail_Return_Impact_Report.pdf
+└── README.md
+
+---
+
+## 5) Data Processing & Modeling
+
+### Python (data processing & enrichment)
+
+Python (pandas) was used to:
+- efficiently load a large Excel dataset
+- clean and standardize columns (dates, numeric fields, IDs)
 - split raw data into logical entities (orders, order items)
 - enrich data with calculated fields:
-  - gross item revenue, net item revenue
-  - discount amounts / discount %
+  - gross item revenue
+  - net item revenue
+  - discount amount and discount %
   - allocated shipping cost per item
   - return flags and return impact
-- export intermediate CSVs to validate transformations step-by-step
-- ensure correct signs and types (e.g., negative quantities for returns)
-
-### SQLite (warehouse layer) + SQL validation
-- loaded processed data into **retail.db**
-- designed a fact table at line level: **fact_order_item_profit**
-- used SQL for:
-  - row count and aggregation checks
-  - metric sanity validation prior to Power BI
-
-### Power BI (semantic model + dashboard)
-- clean data model with a dedicated **Date table**
-- DAX measures for:
-  - Net Revenue, Gross Margin, Contribution Margin
-  - Return Impact %, Discount %, Shipping Cost %
-  - % Orders with Negative Contribution
-- report pages:
-  1. **Executive Overview** – KPIs and trends + profitability by country
-  2. **Profitability Drivers** – returns vs discounts vs shipping by country
-  3. **Returns Deep Dive – Norway** – trends, seasonality, and multivariate view
+- export intermediate CSV files for validation
+- ensure correct signs and data types (e.g. negative quantities for returns)
 
 ---
 
-## 5) Key Metrics (DAX)
+### SQLite & SQL (warehouse and validation)
 
-Core metrics used in the report:
-- Net Revenue
-- Gross Margin / Gross Margin %
-- Contribution Margin / Contribution Margin %
-- Return Impact %
-- Discount % of Revenue
-- Shipping Cost % of Net Item Revenue
-- % Orders with Negative Contribution
-- Return Lines
+- processed data loaded into **SQLite (`retail.db`)**
+- designed a fact table at line level:  
+  **`fact_order_item_profit`**
+- SQL used for:
+  - aggregation checks
+  - reconciliation of revenue, margin, and return metrics
+  - validation before Power BI ingestion
+
+---
+
+### Power BI (semantic model & dashboard)
+
+- star-schema–like model with a dedicated **Date table**
+- DAX measures for:
+  - Net Revenue
+  - Gross Margin / Gross Margin %
+  - Contribution Margin / Contribution Margin %
+  - Return Impact %
+  - Discount % of Revenue
+  - Shipping Cost % of Net Item Revenue
+  - % Orders with Negative Contribution
+  - Return Lines
+
+Report pages:
+1. **Executive Overview** – KPIs, trends, profitability by country
+2. **Profitability Drivers** – returns vs discounts vs shipping
+3. **Returns Deep Dive (Norway)** – time trends, seasonality, multivariate analysis
 
 ---
 
 ## 6) Key Insights
 
-- Norway is a clear outlier with extremely high return impact (over 100% of net item revenue).
-- Most markets cluster within a narrow discount–return range, suggesting **weak correlation** between discounting and returns.
-- Returns are the most “painful” profitability driver compared to discounts and shipping in selected markets.
-- Return volumes show seasonal patterns (peaks in late-year months), useful for operational planning.
+- Norway is a clear outlier with **extreme return impact**, exceeding 100% of net item revenue.
+- Most markets cluster within a narrow discount–return range, indicating a **weak relationship between discounting and returns**.
+- Returns are the most damaging profitability driver compared to discounts and shipping costs in selected markets.
+- Return volumes show seasonal patterns, with peaks in late-year months.
 
 ---
 
-## 7) Recommendations
+## 7) Business Recommendations
 
-1. Investigate operational drivers behind Norway’s returns (logistics, delivery lead times, fulfillment quality).
-2. Introduce stricter return policy controls in high-impact markets (where feasible).
-3. Review shipping pricing strategy or carrier contracts for markets with high shipping % of revenue.
-4. Reduce unnecessary discounting in markets where it does not improve return behavior or margin.
-
----
-
-## 8) Report Output
-
-- PDF export: see `report/powerbi_report.pdf`
-- Screenshots: see `report/screenshots/`
+1. Investigate operational drivers behind Norway’s return behavior (logistics, fulfillment quality, delivery lead times).
+2. Apply stricter return controls in markets with high return impact.
+3. Review shipping contracts and pricing in markets with elevated shipping cost ratios.
+4. Reduce discounting where it does not improve profitability or customer behavior.
 
 ---
 
-## 9) What I would do next (if more data was available)
+## 8) Deliverables
 
+- **Power BI report (PDF):**  
+  `docs/Retail_Return_Impact_Report.pdf`
+
+---
+
+## 9) Future Improvements
+
+If additional data were available:
 - analyze returns by product category and return reason
-- include carrier / warehouse / fulfillment data to pinpoint operational issues
-- segment customers (new vs returning) and evaluate return behavior patterns
-- build a simple predictive model to flag high-risk orders (Python)
+- include carrier / warehouse data to identify operational bottlenecks
+- segment customers (new vs returning) and evaluate return behavior
+- build a simple predictive model to flag high-risk orders
 
 ---
 
-## 10) Tools
+## 10) Tools & Technologies
 
-- Python (pandas) – processing & enrichment
-- SQLite + SQL – storage and validation
-- Power BI + DAX – modeling, measures, visualization
-
-## Dashboard Preview
-
-📄 **Power BI Report (PDF)**  
-[Download report](docs/Retail_Return_Impact_Report.pdf)
+- **Python (pandas)** – data cleaning & enrichment  
+- **SQLite + SQL** – analytical storage & validation  
+- **Power BI + DAX** – modeling, metrics, and visualization
